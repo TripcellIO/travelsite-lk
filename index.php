@@ -41,7 +41,8 @@ if ($page === 'logout') {
 }
 
 require_auth();
-$allowed = ['dashboard'];
+$allowed = ['dashboard','destinations'];
 if (!in_array($page, $allowed, true)) $page = 'dashboard';
 
+if ($page === 'destinations') { require __DIR__ . '/modules/destinations.php'; exit; }
 require __DIR__ . '/views/layout.php';
