@@ -27,3 +27,9 @@ Included:
 7. Open `index.php?page=login`.
 
 Never commit `.env`, database passwords, API secrets or private keys.
+
+## Step 4 — AI search configuration
+
+The admin page `?page=ai-search` saves planner defaults, search types, budget mode, limits and prompt instructions. Only administrators may save or restore prompts. Changes are recorded in `ai_prompt_versions` and the existing audit log. AI requests and supplier lookups are not yet implemented; enabling this setting alone does not create a working public AI search.
+
+For an existing database, import `migrations/004_ai_settings.sql` once before using the AI settings page. A fresh `database.sql` import already contains this table. Keep AI API credentials in server-side configuration, outside the database and Git.

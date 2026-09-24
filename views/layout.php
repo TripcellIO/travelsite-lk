@@ -14,7 +14,7 @@ try {
 <aside>
 <div class="logo">✈ <span>travelsite.lk</span><small>ADMIN</small></div>
 <nav><a class="on" href="?page=dashboard">Dashboard</a>
-<span>Destinations</span><span>Affiliate Providers</span><span>AI Search</span><span>Trips</span>
+<span>Destinations</span><span>Affiliate Providers</span><a href="?page=ai-search">AI Search</a><span>Trips</span>
 <span>Clicks & Conversions</span><span>CMS & SEO</span><span>Site Settings</span><span>Admin Users</span><span>Audit Log</span></nav>
 <a class="logout" href="?page=logout">Sign out</a>
 </aside>

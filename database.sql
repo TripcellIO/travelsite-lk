@@ -119,3 +119,11 @@ INSERT INTO settings(`key`,`value`) VALUES
 ('timezone','Asia/Colombo'),
 ('ai_provider','openai')
 ON DUPLICATE KEY UPDATE value=VALUES(value);
+
+CREATE TABLE ai_prompt_versions (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ prompt_text TEXT NOT NULL,
+ created_by BIGINT UNSIGNED NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ INDEX(created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

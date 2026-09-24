@@ -41,9 +41,10 @@ if ($page === 'logout') {
 }
 
 require_auth();
-$allowed = ['dashboard','destinations','providers'];
+$allowed = ['dashboard','destinations','providers','ai-search'];
 if (!in_array($page, $allowed, true)) $page = 'dashboard';
 
 if ($page === 'destinations') { require __DIR__ . '/modules/destinations.php'; exit; }
 if ($page === 'providers') { require __DIR__ . '/modules/providers.php'; exit; }
+if ($page === 'ai-search') { require __DIR__ . '/modules/ai_search.php'; exit; }
 require __DIR__ . '/views/layout.php';

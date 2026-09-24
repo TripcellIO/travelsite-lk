@@ -3,7 +3,7 @@
 <title>Destinations · TravelSite.lk</title><link rel="stylesheet" href="assets/admin.css"></head><body>
 <aside><div class="logo">✈ <span>travelsite.lk</span><small>ADMIN</small></div><nav>
 <a href="?page=dashboard">Dashboard</a><a class="on" href="?page=destinations">Destinations</a>
-<span>Affiliate Providers</span><span>AI Search</span><span>Trips</span><span>Clicks & Conversions</span><span>CMS & SEO</span><span>Site Settings</span><span>Admin Users</span><span>Audit Log</span>
+<span>Affiliate Providers</span><a href="?page=ai-search">AI Search</a><span>Trips</span><span>Clicks & Conversions</span><span>CMS & SEO</span><span>Site Settings</span><span>Admin Users</span><span>Audit Log</span>
 </nav><a class="logout" href="?page=logout">Sign out</a></aside>
 <section class="shell"><header><div><b>Destinations</b><small>TravelSite.lk content catalogue</small></div><div><?=e($_SESSION['admin_name'])?> · <?=e($_SESSION['admin_role'])?></div></header><main>
 <?php if($notice):?><div class="alert"><?=e($notice)?></div><?php endif;?>
