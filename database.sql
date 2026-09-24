@@ -1,0 +1,121 @@
+SET NAMES utf8mb4;
+
+CREATE TABLE admin_users (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(100) NOT NULL,
+ email VARCHAR(190) NOT NULL UNIQUE,
+ password_hash VARCHAR(255) NOT NULL,
+ role ENUM('super_admin','admin','editor','analyst') NOT NULL DEFAULT 'admin',
+ status ENUM('active','disabled') NOT NULL DEFAULT 'active',
+ last_login_at DATETIME NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE settings (
+ `key` VARCHAR(100) PRIMARY KEY,
+ `value` LONGTEXT NULL,
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE destinations (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(150) NOT NULL,
+ country VARCHAR(100) NOT NULL,
+ slug VARCHAR(160) UNIQUE NOT NULL,
+ summary TEXT NULL,
+ hero_image VARCHAR(255) NULL,
+ featured TINYINT(1) DEFAULT 0,
+ active TINYINT(1) DEFAULT 1,
+ seo_title VARCHAR(190) NULL,
+ seo_description VARCHAR(255) NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE providers (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(150) NOT NULL,
+ code VARCHAR(80) UNIQUE NOT NULL,
+ type ENUM('flight','hotel','tour','package') NOT NULL,
+ affiliate_id VARCHAR(190) NULL,
+ base_url VARCHAR(500) NULL,
+ active TINYINT(1) DEFAULT 1,
+ config_json JSON NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE trips (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ trip_code VARCHAR(40) UNIQUE NOT NULL,
+ user_id BIGINT UNSIGNED NULL,
+ destination VARCHAR(190) NULL,
+ origin VARCHAR(100) NULL,
+ start_date DATE NULL,
+ end_date DATE NULL,
+ travellers_json JSON NULL,
+ budget DECIMAL(14,2) NULL,
+ currency CHAR(3) DEFAULT 'LKR',
+ ai_query TEXT NULL,
+ itinerary_json JSON NULL,
+ status ENUM('draft','active','part_booked','booked','expired','cancelled') DEFAULT 'draft',
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE affiliate_clicks (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ click_code VARCHAR(60) UNIQUE NOT NULL,
+ provider_id BIGINT UNSIGNED NULL,
+ trip_code VARCHAR(40) NULL,
+ product_type VARCHAR(40) NULL,
+ external_product_id VARCHAR(190) NULL,
+ target_url TEXT NULL,
+ session_id VARCHAR(190) NULL,
+ ip_hash CHAR(64) NULL,
+ user_agent VARCHAR(500) NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ INDEX(provider_id), INDEX(trip_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE conversions (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ click_code VARCHAR(60) NULL,
+ provider_id BIGINT UNSIGNED NULL,
+ external_booking_id VARCHAR(190) NULL,
+ booking_value DECIMAL(14,2) NULL,
+ commission_value DECIMAL(14,2) NULL,
+ currency CHAR(3) NULL,
+ status VARCHAR(40) DEFAULT 'pending',
+ raw_json JSON NULL,
+ converted_at DATETIME NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE cms_pages (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ title VARCHAR(190) NOT NULL,
+ slug VARCHAR(190) UNIQUE NOT NULL,
+ body LONGTEXT NULL,
+ seo_title VARCHAR(190) NULL,
+ seo_description VARCHAR(255) NULL,
+ status ENUM('draft','published') DEFAULT 'draft',
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE audit_logs (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ admin_user_id BIGINT UNSIGNED NULL,
+ action VARCHAR(100) NOT NULL,
+ entity VARCHAR(100) NULL,
+ entity_id BIGINT NULL,
+ ip_address VARCHAR(64) NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ INDEX(admin_user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO settings(`key`,`value`) VALUES
+('site_name','TravelSite.lk'),
+('currency','LKR'),
+('timezone','Asia/Colombo'),
+('ai_provider','openai')
+ON DUPLICATE KEY UPDATE value=VALUES(value);
